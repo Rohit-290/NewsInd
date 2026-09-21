@@ -1,8 +1,7 @@
-import React, { Component } from 'react'
-import NewsItem from './NewsItem'
-
-export class News extends Component {
-  results= [
+{
+  "status": "success",
+  "totalResults": 3257,
+  "results": [
     {
       "article_id": "073b412b4af1e5c8717c2a45615e7678",
       "link": "https://circleofcricket.com/category/Latest_news/105679/lion-at-home-and-cat-overseas-sandeep-patil-offers-blunt-verdict-on-abhishek-sharma-vaibhav-sooryavanshi",
@@ -308,56 +307,6 @@ export class News extends Component {
       "ai_summary": "ONLY AVAILABLE IN PAID PLANS",
       "duplicate": true
     }
-  ]
-
-  constructor(){
-      super();
-      this.state = {
-        results: this.results
-      }
-  }
-  
-  render() {
-    return (
-      <div className="container my-3">
-        <h2>&#9889; Trending</h2>
-        <div className="row">
-        <div className="col-md-4">
-          <NewsItem title="mytitle" description="mydesc" imageUrl="https://circleofcricket.com/post_image/post_image_9e12f50.jpg" newsUrl="TODO"/>
-        </div>
-        <div className="col-md-4">
-        <NewsItem/>
-        </div>
-        <div className="col-md-4">
-        <NewsItem/>
-        </div>
-        </div>
-          <div className="row">
-        <div className="col-md-4">
-          <NewsItem/>
-        </div>
-        <div className="col-md-4">
-        <NewsItem/>
-        </div>
-        <div className="col-md-4">
-        <NewsItem/>
-        </div>
-        </div>
-          <div className="row">
-        <div className="col-md-4">
-          <NewsItem/>
-        </div>
-        <div className="col-md-4">
-        <NewsItem/>
-        </div>
-        <div className="col-md-4">
-        <NewsItem/>
-        </div>
-        </div>
-     
-      </div>
-    )
-  }
+  ],
+  "nextPage": "1789915378702331133"
 }
-
-export default News
