@@ -1,47 +1,59 @@
 import React, { Component } from 'react'
 import NewsItem from './NewsItem'
+import Spinner from './Spinner';
 
 export class News extends Component {
   
   constructor(){
       super();
       this.state = {
-        results: [],
+        articles: [],
         loading: false,
-        page: ""
+        page: 1
       }
   }
 
   async componentDidMount(){
-    let url = "https://newsdata.io/api/1/latest?apikey=pub_8c68a2f176db4447a77fa9384ba418a6&country=in,gb,us,sa,au&language=en&image=1&video=0";
+    let url = `https://newsapi.org/v2/top-headlines?country=us&apiKey=f9ed0711bae34c07983ef27e09131095&pageSize=${this.props.pageSize}`;
+    this.setState({
+      loading: true
+    })
     let data = await fetch(url);
     let parsedData = await data.json();
-    console.log(parsedData);
     this.setState({
-      page: parsedData.nextPage ,
-      results: parsedData.results});
+      articles: parsedData.articles ,
+      totalResults: parsedData.totalResults,
+      loading: false
+    }
+  )
   }
 
   nextPage = async ()=>{
-    let url = `https://newsdata.io/api/1/latest?apikey=pub_8c68a2f176db4447a77fa9384ba418a6&country=in,gb,us,sa,au&language=en&image=1&video=0&page=${this.state.page}`
+    if(!this.state.page+1 > Math.ceil(`${this.state.totalResults}/${this.props.pageSize}`)){
+    let url = `https://newsapi.org/v2/top-headlines?country=us&apiKey=f9ed0711bae34c07983ef27e09131095&pageSize=${this.props.pageSize}&page=${this.state.page + 1}`;
+    
     let data = await fetch(url);
     let parsedData = await data.json();
     console.log(parsedData);
     this.setState({
-        page: parsedData.nextPage,
-        results: parsedData.results
+        articles: parsedData.articles ,
+        page: this.state.page + 1,
+        
        }
-       )
+      )
+    }
   }
 
    prevPage = async ()=>{
-    let url = `https://newsdata.io/api/1/latest?apikey=pub_53d480ddddcf4af1a96729837e76a8af&country=in,gb,us,sa,au&language=en&image=1&video=0&page=${this.state.page}`
+    let url = `https://newsapi.org/v2/top-headlines?country=us&apiKey=f9ed0711bae34c07983ef27e09131095&pageSize=${this.props.pageSize}&page=${this.state.page - 1}`;
+    
     let data = await fetch(url);
     let parsedData = await data.json();
     console.log(parsedData);
     this.setState({
-        page: parsedData.nextPage ,
-        results: parsedData.results
+        articles: parsedData.articles,
+        page: this.state.page - 1,
+  
        }
        )
   }
@@ -49,17 +61,18 @@ export class News extends Component {
   render() {
     return (
       <div className="container my-3" id="mode">
-        <h2>&#9889; Trending</h2>
+        <h2>&#9889; Trending</h2> 
+        {this.state.loading && <Spinner/>}
         <div className="row" >
-        {this.state.results.map((ele)=>{
-         return  <div className="col-md-4" key= {ele.article_id}>
-         <NewsItem title={ele.title} description={ele.description} imageUrl={ele.image_url} newsUrl={ele.link}/>
+        {this.state.articles.map((ele)=>{
+         return  <div className="col-md-4" key= {ele.url}>
+         <NewsItem title={ele.title} description={ele.description} imageUrl={ele.urlToImage} newsUrl={ele.url}/>
         </div>
         })}
       </div>
       <div className="container d-flex justify-content-between">
-        <button type="button" class="btn btn-dark" onClick={this.prevPage}>Previous</button>
-        <button type="button" class="btn btn-dark"onClick={this.nextPage}>Next</button>
+        <button type="button" className="btn btn-dark" onClick={this.prevPage} disabled={this.state.page<=1}>Previous</button>
+        <button type="button" className="btn btn-dark"onClick={this.nextPage} disabled={this.state.page+1 > Math.ceil(this.state.totalResults/this.props.pageSize)}>Next</button>
       </div>
       </div>
     )
