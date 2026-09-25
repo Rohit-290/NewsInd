@@ -7,7 +7,7 @@ import PropTypes from 'prop-types'
 export class News extends Component {
   
   static defaultProps = {
-     country: "in",
+     country: "us",
      pageSize: 5,
      category: "general"
   }
@@ -28,7 +28,7 @@ export class News extends Component {
   }
 
   async componentDidMount(){
-    let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&apiKey=f9ed0711bae34c07983ef27e09131095&pageSize=${this.props.pageSize}`;
+    let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=f9ed0711bae34c07983ef27e09131095&pageSize=${this.props.pageSize}`;
     this.setState({
       loading: true
     })
@@ -47,7 +47,7 @@ export class News extends Component {
 
     }
     else{
-    let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&apiKey=f9ed0711bae34c07983ef27e09131095&pageSize=${this.props.pageSize}&page=${this.state.page + 1}`;
+    let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=f9ed0711bae34c07983ef27e09131095&pageSize=${this.props.pageSize}&page=${this.state.page + 1}`;
     this.setState({
       loading: true
     })
@@ -64,7 +64,7 @@ export class News extends Component {
   }
 
    prevPage = async ()=>{
-    let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&apiKey=f9ed0711bae34c07983ef27e09131095&pageSize=${this.props.pageSize}&page=${this.state.page - 1}`;
+    let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=f9ed0711bae34c07983ef27e09131095&pageSize=${this.props.pageSize}&page=${this.state.page - 1}`;
     this.setState({
       loading: true
     })
@@ -82,12 +82,12 @@ export class News extends Component {
   render() {
     return (
       <div className="container my-3" id="mode">
-        <h2>&#9889; Trending</h2> 
+        <h2 className="my-2">&#9889; Trending</h2> 
         {this.state.loading && <Spinner/>}
         <div className="row" >
         {!this.state.loading && this.state.articles.map((ele)=>{
-         return  <div className="col-md-4" key= {ele.url}>
-         <NewsItem title={ele.title} description={ele.description} imageUrl={ele.urlToImage} newsUrl={ele.url}/>
+         return  <div className="col-md-4 my-3" key= {ele.url}>
+         <NewsItem title={ele.title} description={ele.description} imageUrl={ele.urlToImage} newsUrl={ele.url} author={ele.author} date={ele.publishedAt} source={ele.source.name}/>
         </div>
         })}
       </div>
