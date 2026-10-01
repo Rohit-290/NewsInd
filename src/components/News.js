@@ -9,7 +9,7 @@ const News = (props) => {
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [totalResults, setTotalResults] = useState(0);
-  document.title = `NewsInd - ${capitalizeFirstLetter(props.category)}`;
+ 
 
   function capitalizeFirstLetter (str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
@@ -30,17 +30,19 @@ const News = (props) => {
   }
  
   useEffect(() => {
+    document.title = `NewsInd - ${capitalizeFirstLetter(props.category)}`;
     updateNews();
+    //eslint-disable-next-line
   }, [])
   
 
 
   async function fetchMoreData (){
+    let url = `https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&page=${page+1}&apiKey=${props.apiKey}&pageSize=${props.pageSize}`;
     setPage(page+1);
-    let url = `https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&page=${page}&apiKey=${props.apiKey}&pageSize=${props.pageSize}`;
     let data = await fetch(url);
     let parsedData = await data.json();
-    setArticles(parsedData.articles);
+    setArticles(articles.concat(parsedData.articles));
     setTotalResults(parsedData.totalResults);
   };
 
@@ -54,7 +56,7 @@ const News = (props) => {
           dataLength={articles.length}
           next={fetchMoreData}
           hasMore={articles.length !== totalResults}
-          loader={<spinner/>}
+          loader={<Spinner/>}
         >
           <div className="container">
             <div className="row">
